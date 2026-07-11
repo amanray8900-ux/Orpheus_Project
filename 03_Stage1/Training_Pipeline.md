@@ -52,3 +52,15 @@ Finally, we trigger the script using:
 !accelerate launch --num_processes 2 train.py
 ```
 This commands the Hugging Face `accelerate` engine to spawn two independent processes. Each process handles a chunk of the batch on its respective T4 GPU, synchronizing gradients via Distributed Data Parallel (DDP) under the hood.
+
+## 6. Training Interpretation & Tracking
+
+To deeply understand and monitor the training process, we integrated two primary platforms:
+
+### Weights & Biases (WandB)
+- **Real-Time Telemetry:** By setting `report_to = "wandb"`, the trainer logs metrics every 10 steps. This provides a live dashboard of our training loss, learning rate (showing the cosine decay curve), and step speed.
+- **Interpretation for Mentor:** WandB allows us to see immediately if the loss spikes or plateaus. If the training loss drops too quickly to near-zero, it indicates overfitting. If it's unstable (jumping wildly), it might mean the learning rate (`2e-4`) is too high or the batch size is too small. WandB also tracks GPU utilization, helping us confirm that both T4 GPUs are fully saturated and not bottlenecked by CPU data loading.
+
+### Hugging Face Hub (HF)
+- **Model Versioning & Checkpointing:** Setting `push_to_hub = True` and `hub_strategy = "checkpoint"` automatically uploads the LoRA adapter weights (`adapter_model.safetensors`), optimizer states, and scheduler states directly to our Hugging Face repository every 37 steps.
+- **Interpretation for Mentor:** This gives us a historical timeline of the model's intelligence. Instead of just evaluating the *final* model, we can download intermediate checkpoints from HF. This allows us to track exactly *when* the model learned certain phonetic mappings, and prevents catastrophic loss of training progress if the Kaggle kernel crashes (we just pull the latest checkpoint and resume).

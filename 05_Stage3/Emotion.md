@@ -15,14 +15,14 @@ In Stage 2, the model learned consistent speaker profiles (`prerna` and `prakhar
 
 ## Hypothesis
 Conditioning the transformer on a joint speaker-style template:
-$$\text{Prompt} = \text{"User: <[speaker]> <[style]> बोलिए : \"[text]\""}$$
+$$\text{Prompt} = \text{"[speaker= speaker_name] [tone= tone_name] \"[text]\""}$$
 will allow the self-attention mechanism to learn joint representations. At inference, the model will align the generative audio tokens with both the speaker's vocal profile and the designated emotional style.
 
 ---
 
 ## Dataset & Preprocessing
 * **Size**: A well-balanced dataset of approximately **5,000 samples**.
-* **Emotions**: Mapped across **7 emotions** (including anger, surprise, neutral, and other expressive reading styles).
+* **Emotions**: Mapped across **7 emotions** (including anger, surprise, neutral, happy, sad, fear, disgust).
 * **Sampling Strategy**: To prevent the model from collapsing to a flat "neutral mean" (catastrophic forgetting of prosody), stratified sampling with replacement was applied to minority emotional styles to hit the exact target proportions.
 * **Speaker Balance**: Equal distribution between `prerna` (Female) and `prakhar` (Male).
 * **Preprocessing**: Standard audio quality filters (VAD cropping, 2–15s duration, SNR $\ge$ 8.0 dB, clipping fraction $\le$ 0.01, loudness normalized to -23.0 LUFS).
@@ -30,10 +30,10 @@ will allow the self-attention mechanism to learn joint representations. At infer
 ## Method
 Supervised Fine-Tuning (SFT) using the checkpoint from Stage 2 as the base. The prompt template was adjusted to feed joint conditioning metadata:
 * **Prompt Format**:
-  `User: <[speaker]> <[style]> बोलिए : "[normalized_text]"`
+  `<|SPEECH_GENERATION_START|> [speaker= speaker_name] [tone= tone_name] "[normalized_text]"`
   `Assistant: <|SPEECH_GENERATION_START|>`
 * **Example**:
-  `User: <prakhar> <surprise> बोलिए : "क्या सच में ऐसा हुआ?"`
+  `<|SPEECH_GENERATION_START|> [speaker= prakhar] [tone= surprise] "क्या सच में ऐसा हुआ?"`
   `Assistant: <|SPEECH_GENERATION_START|>[audio tokens]`
 
 ---

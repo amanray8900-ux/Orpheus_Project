@@ -5,7 +5,7 @@ This document outlines the design and proposed evaluation for replacing the defa
 ---
 
 ## Objective
-The objective is to explore alternative transformer backbones (specifically **Gemma-3-270M**, **Qwen3-4B**, and **Gemma-3-4B**) to optimize memory efficiency, inference speed, and token density for Hindi speech generation.
+The objective is to explore alternative transformer backbones (specifically **Gemma-3-270M**) to optimize memory efficiency, inference speed, and token density for Hindi speech generation.
 
 ## Problem
 The current 3B parameter Llama-based backbone is computationally heavy:

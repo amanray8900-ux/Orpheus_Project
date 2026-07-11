@@ -33,7 +33,7 @@ Training can be stabilized and OOMs prevented by:
 
 ## Dataset & Preprocessing
 The model was retrained on a reduced, high-quality subset of **31,394 samples (approx. 52 hours of data)**:
-* **Composition**: 20% Hinglish (Ayushi Agarwal dataset), 10% Kathbath, and 50% Male Rasa dataset.
+* **Composition**: 100% Hinglish (Ayushi Agarwal dataset), 30% Kathbath, and 50% Rasa dataset.
 * **Audio Filters**:
   * Duration range: $2.0 \le t \le 15.0$ seconds.
   * Voice Activity Detection (VAD): Applied `silero-vad` to crop silent leading/trailing frames.

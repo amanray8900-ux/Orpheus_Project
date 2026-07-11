@@ -25,9 +25,9 @@ The training dataset was restricted to the **Rasa Hindi dataset**, which include
 
 ## Method
 Supervised Fine-Tuning (SFT) using the checkpoint from Stage 1 as the base. The text prompts are modified during sequence construction to include the speaker prefix:
-$$\text{Formatted Prompt} = \text{SpeakerName} + \text{": "} + \text{text}$$
+$$\text{Formatted Prompt} = \text{Speaker= speaker_name} + \text{text}$$
 Example:
-`prakhar: हालांकि चिकित्सकों ने जेसीओ की मौत हार्ट अटैक से हुई बताया है`
+`[Speaker=prakhar] हालांकि चिकित्सकों ने जेसीओ की मौत हार्ट अटैक से हुई बताया है`
 
 During training, the standard next-token prediction loss forces the model to align the prefix token (`prakhar` or `prerna`) with the speaker's vocal properties.
 
